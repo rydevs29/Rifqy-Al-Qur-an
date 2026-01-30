@@ -8,18 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0b1414; color: #e2e8f0; scroll-behavior: smooth; }
-        .arabic { font-family: 'Amiri', serif; line-height: 2.5; text-align: right; direction: rtl; }
+        .arabic { font-family: 'Amiri', serif; line-height: 2.8; text-align: right; direction: rtl; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .gradient-brand { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); }
         .hidden { display: none; }
         .loader { width: 40px; height: 40px; border: 4px solid #FFF; border-bottom-color: #10b981; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Tajwid Colors based on alquran.cloud */
-        .tajwid-ghunnah { color: #ff7e00; font-weight: bold; }
-        .tajwid-ikhfa { color: #ff0000; font-weight: bold; }
-        .tajwid-idgham { color: #008000; font-weight: bold; }
-        .tajwid-qalaqalah { color: #0000ff; font-weight: bold; }
-        .tajwid-mad { color: #ff00ff; font-weight: bold; }
+        /* Tajwid Colors */
+        .tajwid-ghunnah { color: #ff7e00 !important; font-weight: bold; }
+        .tajwid-ikhfa { color: #ff0000 !important; font-weight: bold; }
+        .tajwid-idgham { color: #008000 !important; font-weight: bold; }
+        .tajwid-qalaqalah { color: #0000ff !important; font-weight: bold; }
+        .tajwid-mad { color: #ff00ff !important; font-weight: bold; }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#0b1414]">
@@ -36,7 +36,7 @@
             <div class="text-right"><p class="text-[8px] text-gray-500 font-bold uppercase">Jakarta Default</p></div>
         </header>
 
-        <div class="glass p-4 rounded-2xl mb-6 flex justify-between items-center text-center overflow-x-auto gap-4 no-scrollbar">
+        <div class="glass p-4 rounded-2xl mb-6 flex justify-between items-center text-center overflow-x-auto gap-4">
             <div class="min-w-[50px]"><p class="text-[8px] text-gray-400 uppercase">Subuh</p><p id="sholat-subuh" class="text-xs font-bold text-emerald-400">--:--</p></div>
             <div class="min-w-[50px]"><p class="text-[8px] text-gray-400 uppercase">Dzuhur</p><p id="sholat-dzuhur" class="text-xs font-bold text-emerald-400">--:--</p></div>
             <div class="min-w-[50px]"><p class="text-[8px] text-gray-400 uppercase">Ashar</p><p id="sholat-ashar" class="text-xs font-bold text-emerald-400">--:--</p></div>
@@ -55,7 +55,7 @@
 
         <div class="flex items-center justify-between mb-4">
             <h3 class="font-bold flex items-center gap-2"><span class="w-1.5 h-4 bg-emerald-500 rounded-full"></span> Daftar Surat</h3>
-            <input type="text" id="search-input" onkeyup="searchSurah()" placeholder="Cari..." class="bg-white/5 border border-white/10 rounded-lg py-1 px-3 text-xs w-24">
+            <input type="text" id="search-input" onkeyup="searchSurah()" placeholder="Cari..." class="bg-white/5 border border-white/10 rounded-lg py-1 px-3 text-xs w-24 outline-none">
         </div>
         <div id="surah-list" class="space-y-3"></div>
     </div>
@@ -73,18 +73,18 @@
         </nav>
 
         <div id="settings-menu" class="hidden fixed top-20 right-5 w-56 glass p-5 rounded-2xl z-[60] shadow-2xl border border-white/10">
-            <h4 class="text-xs font-black text-emerald-500 uppercase mb-4 tracking-widest">Setelan Membaca</h4>
+            <h4 class="text-xs font-black text-emerald-500 uppercase mb-4 tracking-widest text-center">Setelan</h4>
             <div class="space-y-4">
                 <div class="flex justify-between items-center"><label class="text-[10px]">Terjemahan</label><input type="checkbox" id="set-translate" onchange="toggleFitur()" checked></div>
                 <div class="flex justify-between items-center"><label class="text-[10px]">Teks Latin</label><input type="checkbox" id="set-latin" onchange="toggleFitur()" checked></div>
                 <div class="flex justify-between items-center"><label class="text-[10px]">Warna Tajwid</label><input type="checkbox" id="set-tajwid" onchange="toggleFitur()" checked></div>
                 <hr class="opacity-10">
                 <div>
-                    <label class="text-[10px] block mb-2">Qari / Pembaca</label>
+                    <label class="text-[10px] block mb-2 font-bold">Qari</label>
                     <select id="set-qari" onchange="toggleFitur()" class="w-full bg-[#1a2e2e] p-2 rounded-lg text-[10px] outline-none">
-                        <option value="ar.alafasy">Mishary Rashid Al-Afasy</option>
-                        <option value="ar.abdulsamad">Abdul Basit Abdus Samad</option>
-                        <option value="ar.sudais">Abdurrahman As-Sudais</option>
+                        <option value="ar.alafasy">Al-Afasy</option>
+                        <option value="ar.sudais">As-Sudais</option>
+                        <option value="ar.abdulsamad">Abdul Samad</option>
                     </select>
                 </div>
             </div>
@@ -100,25 +100,28 @@
     </div>
 
     <script>
-        let currentAudio = null, isAutoPlay = true, allAyatAudio = [], surahFullData = [], currentSurahId = 1;
+        let currentAudio = null, allAyatAudio = [], surahFullData = [], currentSurahId = 1;
         let lastRead = JSON.parse(localStorage.getItem('lastRead')) || { id: 1, name: 'Al-Fatihah', ayat: 1 };
         let config = { trans: true, latin: true, tajwid: true, qari: 'ar.alafasy' };
 
-        // 1. Core Functions
         function toggleSettingsMenu() { document.getElementById('settings-menu').classList.toggle('hidden'); }
+        
         function toggleFitur() {
             config.trans = document.getElementById('set-translate').checked;
             config.latin = document.getElementById('set-latin').checked;
             config.tajwid = document.getElementById('set-tajwid').checked;
             config.qari = document.getElementById('set-qari').value;
-            viewSurah(currentSurahId); // Reload view
+            viewSurah(currentSurahId);
+            document.getElementById('settings-menu').classList.add('hidden');
         }
 
         async function getSurahList() {
-            const res = await fetch('https://api.quran.gading.dev/surah');
-            const data = await res.json();
-            surahFullData = data.data;
-            renderSurahList(surahFullData);
+            try {
+                const res = await fetch('https://api.quran.gading.dev/surah');
+                const data = await res.json();
+                surahFullData = data.data;
+                renderSurahList(surahFullData);
+            } catch (e) { console.error("Daftar surat gagal."); }
         }
 
         function renderSurahList(data) {
@@ -149,15 +152,18 @@
             container.innerHTML = '';
             
             try {
-                // Fetch Audio and Translation
+                // Fetch Primary Data (Teks & Terjemah)
                 const resGading = await fetch(`https://api.quran.gading.dev/surah/${id}`);
                 const dataGading = await resGading.json();
                 const surah = dataGading.data;
 
-                // Fetch Tajwid data from alquran.cloud
-                const resTajwid = await fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.tajweed`);
-                const dataTajwid = await resTajwid.json();
-                const tajwidAyats = dataTajwid.data.verses;
+                // Fetch Tajwid Data (Optimized)
+                let tajwidAyats = [];
+                if (config.tajwid) {
+                    const resTajwid = await fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.tajweed`);
+                    const dataT = await resTajwid.json();
+                    tajwidAyats = dataT.data.verses;
+                }
 
                 document.getElementById('detail-loader').classList.add('hidden');
                 document.getElementById('current-surah-name').innerText = surah.name.transliteration.id;
@@ -165,40 +171,37 @@
                 document.getElementById('bismillah-box').classList.toggle('hidden', id === 1 || id === 9);
 
                 surah.verses.forEach((v, idx) => {
-                    const tajwidText = tajwidAyats[idx].text;
-                    const audioUrl = `https://cdn.islamic.network/quran/audio/128/${config.qari}/${v.number.inQuran}.mp3`;
-                    allAyatAudio[idx] = audioUrl;
+                    allAyatAudio[idx] = `https://cdn.islamic.network/quran/audio/128/${config.qari}/${v.number.inQuran}.mp3`;
+                    
+                    let teksArab = v.text.arab;
+                    if (config.tajwid && tajwidAyats[idx]) {
+                        teksArab = formatTajwid(tajwidAyats[idx].text);
+                    }
 
                     container.innerHTML += `
                         <div id="ayat-${idx}" class="pb-8 border-b border-white/5 transition-all duration-500">
                             <div class="flex justify-between items-center mb-6">
                                 <span class="bg-emerald-500 text-black font-black text-[10px] w-6 h-6 rounded flex items-center justify-center">${v.number.inSurah}</span>
                                 <div class="flex gap-4">
-                                    <button onclick="playAudio(${idx})" class="text-[10px] font-bold text-emerald-500 italic underline">Play Audio</button>
-                                    <button onclick="saveProgress(${id},'${surah.name.transliteration.id}',${v.number.inSurah})" class="text-[10px] font-bold text-gray-500 italic underline">Tandai</button>
+                                    <button onclick="playAudio(${idx})" class="text-[10px] font-bold text-emerald-500 underline uppercase italic">Play</button>
+                                    <button onclick="saveProgress(${id},'${surah.name.transliteration.id}',${v.number.inSurah})" class="text-[10px] font-bold text-gray-500 underline uppercase italic">Tandai</button>
                                 </div>
                             </div>
-                            <p class="arabic text-3xl mb-4 text-white leading-[3.5rem] tracking-wide" 
-                               onclick="if(config.tajwid) alert('Hukum Tajwid Terdeteksi pada Ayat ini.')">
-                               ${config.tajwid ? formatTajwid(tajwidText) : v.text.arab}
-                            </p>
-                            ${config.latin ? `<p class="text-[11px] text-emerald-400/80 italic mb-2">${v.text.transliteration.en}</p>` : ''}
+                            <p class="arabic text-3xl mb-4 text-white leading-[3.5rem] tracking-wide" onclick="alert('Info Tajwid: Mode Warna Aktif')">${teksArab}</p>
+                            ${config.latin ? `<p class="text-[11px] text-emerald-400 font-bold italic mb-3 tracking-wide">${v.text.transliteration.en}</p>` : ''}
                             ${config.trans ? `<p class="text-sm text-gray-400 font-light leading-relaxed">${v.translation.id}</p>` : ''}
                         </div>`;
                 });
-            } catch (e) { container.innerHTML = "Gagal memuat ayat."; }
+            } catch (e) { 
+                container.innerHTML = `<div class="text-center py-10 text-red-400">Gagal memuat ayat. Harap refresh atau cek koneksi.</div>`;
+            }
         }
 
-        // Helper Tajwid (Parsing data alquran.cloud)
         function formatTajwid(text) {
-            // Sederhananya alquran.cloud memberikan tag tajwid tertentu yang bisa kita warnai
             return text
-                .replace(/\[h/g, '<span class="tajwid-ghunnah">')
-                .replace(/\[i/g, '<span class="tajwid-ikhfa">')
-                .replace(/\[m/g, '<span class="tajwid-idgham">')
-                .replace(/\[q/g, '<span class="tajwid-qalaqalah">')
-                .replace(/\[a/g, '<span class="tajwid-mad">')
-                .replace(/\]/g, '</span>');
+                .replace(/\[h/g, '<span class="tajwid-ghunnah">').replace(/\[i/g, '<span class="tajwid-ikhfa">')
+                .replace(/\[m/g, '<span class="tajwid-idgham">').replace(/\[q/g, '<span class="tajwid-qalaqalah">')
+                .replace(/\[a/g, '<span class="tajwid-mad">').replace(/\]/g, '</span>');
         }
 
         function playAudio(index) {
@@ -231,8 +234,7 @@
         function saveProgress(id, name, ayat) {
             lastRead = { id, name, ayat };
             localStorage.setItem('lastRead', JSON.stringify(lastRead));
-            alert('Progress ditandai!');
-            showHome();
+            alert('Berhasil Tandai!');
         }
 
         function updateLastReadUI() {
@@ -245,11 +247,13 @@
         setInterval(updateClock, 1000);
         
         async function getJadwal() {
-            const d = new Date();
-            const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`);
-            const data = await res.json();
-            const j = data.data.jadwal;
-            ['subuh','dzuhur','ashar','maghrib','isya'].forEach(s => document.getElementById(`sholat-${s}`).innerText = j[s]);
+            try {
+                const d = new Date();
+                const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`);
+                const data = await res.json();
+                const j = data.data.jadwal;
+                ['subuh','dzuhur','ashar','maghrib','isya'].forEach(s => document.getElementById(`sholat-${s}`).innerText = j[s]);
+            } catch (e) {}
         }
 
         getSurahList(); getJadwal(); updateLastReadUI();
