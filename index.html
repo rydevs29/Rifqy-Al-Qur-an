@@ -14,8 +14,9 @@
         .hidden { display: none; }
         .loader { width: 48px; height: 48px; border: 5px solid #FFF; border-bottom-color: #10b981; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .tajwid-img { filter: invert(1) hue-rotate(90deg); max-width: 100%; height: auto; margin-left: auto; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* Perbaikan Tajwid Style */
+        .tajwid-img { filter: invert(1) hue-rotate(90deg) brightness(1.2); display: block; margin-left: auto; max-width: 100%; height: auto; }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#0b1414]">
@@ -50,28 +51,27 @@
             <div class="absolute -right-6 -bottom-6 text-9xl opacity-10">📖</div>
         </div>
 
-        <div class="relative mb-6">
-            <input type="text" id="search-input" onkeyup="filterSurah()" placeholder="Cari Surat (Contoh: Al-Baqarah)..." class="w-full bg-white/5 border border-white/10 rounded-xl p-4 pl-12 text-sm focus:outline-none focus:border-emerald-500 transition text-white">
-            <span class="absolute left-4 top-4 opacity-40">🔍</span>
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold flex items-center gap-2"><span class="w-1.5 h-4 bg-emerald-500 rounded-full"></span> Daftar Surat</h3>
+            <input type="text" id="search-input" onkeyup="searchSurah()" placeholder="Cari Surat..." class="bg-emerald-900/10 border border-emerald-900/30 rounded-lg py-1 px-3 text-[10px] outline-none focus:border-emerald-500 w-32">
         </div>
-
-        <h3 class="font-bold mb-4 flex items-center gap-2"><span class="w-1.5 h-4 bg-emerald-500 rounded-full"></span> Daftar Surat</h3>
+        
         <div id="surah-list" class="space-y-3">
-            <div class="text-center py-10"><span class="loader"></span><p class="text-xs mt-2 text-gray-500 uppercase tracking-widest">Mencari Mushaf...</p></div>
+            <div class="text-center py-10"><span class="loader"></span><p class="text-xs mt-2 text-gray-500">MENCARI MUSHAF...</p></div>
         </div>
     </div>
 
     <div id="settings-page" class="hidden p-5 pb-32">
         <div class="flex items-center gap-4 mb-8">
             <button onclick="showHome()" class="text-2xl">←</button>
-            <h3 class="font-bold text-xl text-emerald-500">Settings</h3>
+            <h3 class="font-bold text-xl text-emerald-500">Settings Mushaf</h3>
         </div>
         <div class="glass p-6 rounded-2xl space-y-6">
             <div>
                 <label class="text-sm font-bold block mb-2 text-gray-400">Mode Teks Al-Quran</label>
-                <select id="setting-mushaf" onchange="saveSettings()" class="w-full bg-[#1a2e2e] p-3 rounded-xl text-sm border border-emerald-900 text-white">
+                <select id="setting-mushaf" onchange="saveSettings()" class="w-full bg-[#1a2e2e] p-3 rounded-xl text-sm outline-none border border-emerald-900">
                     <option value="digital">Utsmani Digital</option>
-                    <option value="tajwid">Mode Tajwid (Warna)</option>
+                    <option value="tajwid">Mode Tajwid (Gambar Berwarna)</option>
                 </select>
             </div>
             <div class="flex items-center justify-between">
@@ -95,7 +95,7 @@
                     <p id="current-surah-info" class="text-[10px] text-emerald-400 font-bold mt-1 uppercase tracking-tighter"></p>
                 </div>
             </div>
-            <button onclick="stopAudio()" id="btn-stop-audio" class="hidden text-[10px] bg-red-900/40 text-red-400 px-4 py-1 rounded-full font-black border border-red-900/50">STOP AUDIO</button>
+            <button onclick="stopAudio()" id="btn-stop-audio" class="hidden text-[10px] bg-red-900/30 text-red-400 px-3 py-1 rounded-full border border-red-900/50 font-bold">STOP AUDIO</button>
         </nav>
 
         <div id="detail-content" class="p-5">
@@ -103,21 +103,22 @@
             <div class="glass p-8 rounded-[2rem] mb-8 text-center hidden" id="bismillah-box">
                 <p class="arabic text-3xl text-emerald-400">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
             </div>
-            <div id="ayats-container" class="space-y-12 pb-20"></div>
+            <div id="ayats-container" class="space-y-10 pb-20"></div>
         </div>
     </div>
 
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] glass rounded-3xl p-4 flex justify-around items-center z-50 shadow-2xl border-white/5">
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] glass rounded-3xl p-4 flex justify-around items-center z-50 shadow-2xl border border-white/5">
         <button onclick="showHome()" class="flex flex-col items-center gap-1"><span class="text-xl">🏠</span><span class="text-[8px] font-bold text-emerald-500 uppercase">Home</span></button>
-        <button onclick="showBookmark()" class="flex flex-col items-center gap-1"><span class="text-xl">🔖</span><span class="text-[8px] font-bold uppercase text-gray-500">Mark</span></button>
-        <button onclick="showSettings()" class="flex flex-col items-center gap-1"><span class="text-xl">⚙️</span><span class="text-[8px] font-bold uppercase text-gray-500">Sets</span></button>
+        <button onclick="showBookmark()" class="flex flex-col items-center gap-1"><span class="text-xl">🔖</span><span class="text-[8px] font-bold uppercase">Bookmark</span></button>
+        <button onclick="showSettings()" class="flex flex-col items-center gap-1"><span class="text-xl">⚙️</span><span class="text-[8px] font-bold uppercase">Settings</span></button>
     </div>
 
     <script>
         let currentAudio = null;
         let isAutoPlay = true;
+        let currentAyatIndex = 0;
         let allAyatAudio = [];
-        let allSurahs = [];
+        let surahFullData = [];
         let lastRead = JSON.parse(localStorage.getItem('lastRead')) || { id: 1, name: 'Al-Fatihah', ayat: 1 };
         let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
         let userSettings = JSON.parse(localStorage.getItem('userSettings')) || { mushaf: 'digital', autoplay: true };
@@ -135,9 +136,23 @@
             localStorage.setItem('userSettings', JSON.stringify(userSettings));
         }
 
+        function showSettings() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('detail-page').classList.add('hidden');
+            document.getElementById('bookmark-page').classList.add('hidden');
+            document.getElementById('settings-page').classList.remove('hidden');
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('jam-digital').innerText = now.toLocaleTimeString('id-ID');
+        }
+        setInterval(updateTime, 1000);
+
         async function getJadwalSholat() {
             try {
-                const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${new Date().getFullYear()}/${new Date().getMonth()+1}/${new Date().getDate()}`);
+                const date = new Date();
+                const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`);
                 const data = await res.json();
                 const j = data.data.jadwal;
                 document.getElementById('sholat-subuh').innerText = j.subuh;
@@ -148,33 +163,39 @@
             } catch (e) {}
         }
 
+        function updateLastReadUI() {
+            document.getElementById('last-surah-name').innerText = lastRead.name;
+            document.getElementById('last-surah-info').innerText = `Ayat No: ${lastRead.ayat}`;
+            document.getElementById('btn-resume').onclick = () => viewSurah(lastRead.id);
+        }
+
         async function getSurahList() {
             try {
                 const res = await fetch('https://api.quran.gading.dev/surah');
                 const data = await res.json();
-                allSurahs = data.data;
-                renderSurahList(allSurahs);
+                surahFullData = data.data;
+                renderSurahList(surahFullData);
             } catch (err) {}
         }
 
-        function renderSurahList(list) {
+        function renderSurahList(data) {
             const container = document.getElementById('surah-list');
             container.innerHTML = '';
-            list.forEach(s => {
+            data.forEach(s => {
                 container.innerHTML += `
                     <div onclick="viewSurah(${s.number})" class="glass p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-emerald-900/10 active:scale-95 transition">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 flex items-center justify-center bg-emerald-900/20 text-emerald-500 rounded-xl font-black text-xs border border-emerald-900/40">${s.number}</div>
-                            <div><h4 class="font-bold text-sm text-white">${s.name.transliteration.id}</h4><p class="text-[9px] text-gray-500 font-bold uppercase">${s.revelation.id} • ${s.numberOfVerses} Ayat</p></div>
+                            <div><h4 class="font-bold text-sm text-white">${s.name.transliteration.id}</h4><p class="text-[9px] text-gray-500 font-bold uppercase">${s.revelation.id} • ${s.numberOfVerses} AYAT</p></div>
                         </div>
                         <div class="arabic text-xl text-emerald-500">${s.name.short}</div>
                     </div>`;
             });
         }
 
-        function filterSurah() {
+        function searchSurah() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            const filtered = allSurahs.filter(s => s.name.transliteration.id.toLowerCase().includes(query));
+            const filtered = surahFullData.filter(s => s.name.transliteration.id.toLowerCase().includes(query));
             renderSurahList(filtered);
         }
 
@@ -201,12 +222,10 @@
                 if(id !== 1 && id !== 9) document.getElementById('bismillah-box').classList.remove('hidden');
 
                 surah.verses.forEach((v, idx) => {
-                    let teksArabHTML = `<p class="arabic text-3xl mb-4 text-white">${v.text.arab}</p>`;
-                    
-                    // Fitur Tajwid (Jika diaktifkan di settings)
-                    if(userSettings.mushaf === 'tajwid') {
-                        teksArabHTML = `<div class="mb-4 text-right"><img src="https://api.quran.gading.dev/surah/${id}/${v.number.inSurah}/tajwid" class="tajwid-img" alt="tajwid"></div>`;
-                    }
+                    // Teks Arab / Tajwid
+                    let displayTeks = userSettings.mushaf === 'tajwid' 
+                        ? `<img src="https://everyayah.com/data/images_png/${id}_${v.number.inSurah}.png" class="tajwid-img" alt="tajwid">` 
+                        : `<p class="arabic text-3xl mb-4 text-white">${v.text.arab}</p>`;
 
                     container.innerHTML += `
                         <div id="ayat-${idx}" class="border-b border-white/5 pb-10 transition duration-500">
@@ -214,29 +233,29 @@
                                 <span class="w-8 h-8 rounded-lg bg-emerald-500 text-black flex items-center justify-center text-[10px] font-black">${v.number.inSurah}</span>
                                 <div class="flex gap-4">
                                     <button onclick="playAudio(${idx})" class="text-[10px] font-bold text-emerald-500">▶️ PLAY</button>
-                                    <button onclick="addBookmark(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})" class="text-[10px] font-bold text-gray-500">🔖 BOOK</button>
+                                    <button onclick="addBookmark(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})" class="text-[10px] font-bold text-gray-500">🔖 BOOKMARK</button>
                                     <button onclick="saveProgress(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})" class="text-[10px] font-bold text-gray-300">📌 TANDAI</button>
                                 </div>
                             </div>
-                            ${teksArabHTML}
-                            <p class="text-xs text-emerald-400 font-bold mb-3 tracking-wide">${v.text.transliteration.en}</p>
-                            <p class="text-sm text-gray-400 italic leading-relaxed border-l-2 border-emerald-900 pl-4">${v.translation.id}</p>
+                            ${displayTeks}
+                            <p class="text-xs text-emerald-400 font-bold mb-3 italic tracking-wide">${v.text.transliteration.en}</p>
+                            <p class="text-sm text-gray-400 font-light border-l-2 border-emerald-900 pl-4">${v.translation.id}</p>
                         </div>`;
                 });
-            } catch (err) { alert('Gagal memuat.'); }
+            } catch (err) {}
         }
 
         function playAudio(index) {
             stopAudio();
+            currentAyatIndex = index;
             currentAudio = new Audio(allAyatAudio[index]);
-            document.querySelectorAll('[id^="ayat-"]').forEach(el => el.classList.remove('bg-emerald-900/10'));
-            const el = document.getElementById(`ayat-${index}`);
-            el.classList.add('bg-emerald-900/10');
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const currentEl = document.getElementById(`ayat-${index}`);
+            currentEl.classList.add('bg-emerald-900/10');
+            currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             document.getElementById('btn-stop-audio').classList.remove('hidden');
             currentAudio.play();
             currentAudio.onended = () => {
-                if (isAutoPlay && index < allAyatAudio.length - 1) playAudio(index + 1);
+                if (isAutoPlay && currentAyatIndex < allAyatAudio.length - 1) playAudio(currentAyatIndex + 1);
                 else stopAudio();
             };
         }
@@ -250,14 +269,14 @@
         function saveProgress(id, name, ayat) {
             lastRead = { id, name, ayat };
             localStorage.setItem('lastRead', JSON.stringify(lastRead));
-            alert('Progress Disimpan!');
+            alert('Progress ditandai!');
             showHome();
         }
 
         function addBookmark(id, name, ayat) {
             bookmarks.push({ id, name, ayat });
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-            alert('Bookmark Ditambahkan!');
+            alert('Bookmark disimpan!');
         }
 
         function showBookmark() {
@@ -272,9 +291,9 @@
                     <div class="glass p-4 rounded-xl flex justify-between items-center">
                         <div onclick="viewSurah(${b.id})">
                             <h4 class="font-bold">${b.name}</h4>
-                            <p class="text-[10px] text-emerald-500 uppercase">Ayat Ke: ${b.ayat}</p>
+                            <p class="text-[10px] text-emerald-500 uppercase font-black">Ayat ${b.ayat}</p>
                         </div>
-                        <button onclick="deleteBookmark(${idx})" class="text-red-500 text-xs">Hapus</button>
+                        <button onclick="deleteBookmark(${idx})" class="text-red-500 text-xs font-bold">Hapus</button>
                     </div>`;
             });
         }
@@ -294,14 +313,6 @@
             updateLastReadUI();
         }
 
-        function showSettings() {
-            document.getElementById('home-page').classList.add('hidden');
-            document.getElementById('settings-page').classList.remove('hidden');
-        }
-
-        function updateTime() { document.getElementById('jam-digital').innerText = new Date().toLocaleTimeString('id-ID'); }
-        setInterval(updateTime, 1000);
-        
         initSettings();
         updateLastReadUI();
         getSurahList();
