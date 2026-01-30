@@ -7,237 +7,252 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0b1414; color: #e2e8f0; }
-        .arabic { font-family: 'Amiri', serif; line-height: 2.8; text-align: right; }
+        body { font-family: 'Inter', sans-serif; background-color: #0b1414; color: #e2e8f0; scroll-behavior: smooth; }
+        .arabic { font-family: 'Amiri', serif; line-height: 3; text-align: right; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .gradient-brand { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); }
         .hidden { display: none; }
         
-        /* Animasi Loading Shimmer */
-        .shimmer {
-            background: linear-gradient(90deg, #0f1a1a 25%, #1a2e2e 50%, #0f1a1a 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        /* Animasi Loading */
+        .loader {
+            width: 48px; height: 48px; border: 5px solid #FFF; border-bottom-color: #10b981;
+            border-radius: 50%; display: inline-block; box-sizing: border-box;
+            animation: rotation 1s linear infinite;
         }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#0b1414] pb-24">
+<body class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#0b1414]">
 
-    <div id="tab-home" class="p-5 p-page">
+    <div id="home-page" class="p-5 pb-32">
         <header class="flex justify-between items-center mb-6">
-            <div>
-                <h1 class="font-bold text-xl tracking-tight">Rifqy Al-Quran</h1>
-                <p id="real-time" class="text-[10px] text-emerald-500 font-bold uppercase tracking-widest">--:--</p>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-lg">R</div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight">Rifqy Al-Quran</h1>
+                    <p id="jam-digital" class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">00:00:00</p>
+                </div>
             </div>
             <div class="text-right">
-                <p class="text-[10px] text-gray-500 font-bold">LOKASI</p>
-                <p class="text-xs font-bold text-emerald-400">Jakarta, ID</p>
+                <p class="text-[10px] text-gray-500 font-bold">JAKARTA</p>
+                <p id="tgl-masehi" class="text-[9px] text-emerald-500 uppercase">30 JAN 2024</p>
             </div>
         </header>
 
-        <div id="prayer-times" class="glass rounded-2xl p-4 mb-6 flex justify-between text-center overflow-x-auto gap-4">
-            <div class="flex-shrink-0"><p class="text-[9px] text-gray-500">Subuh</p><p class="text-xs font-bold" id="shubuh">--:--</p></div>
-            <div class="flex-shrink-0"><p class="text-[9px] text-gray-500">Dzuhur</p><p class="text-xs font-bold" id="dzuhur">--:--</p></div>
-            <div class="flex-shrink-0"><p class="text-[9px] text-gray-500">Ashar</p><p class="text-xs font-bold" id="ashar">--:--</p></div>
-            <div class="flex-shrink-0"><p class="text-[9px] text-gray-500">Maghrib</p><p class="text-xs font-bold" id="maghrib">--:--</p></div>
-            <div class="flex-shrink-0"><p class="text-[9px] text-gray-500">Isya</p><p class="text-xs font-bold" id="isya">--:--</p></div>
+        <div class="glass p-4 rounded-2xl mb-6 flex justify-between items-center overflow-x-auto gap-4 no-scrollbar">
+            <div class="text-center min-w-[50px]"><p class="text-[8px] text-gray-500">Subuh</p><p id="sholat-subuh" class="text-xs font-bold text-emerald-400">--:--</p></div>
+            <div class="text-center min-w-[50px]"><p class="text-[8px] text-gray-500">Dzuhur</p><p id="sholat-dzuhur" class="text-xs font-bold text-emerald-400">--:--</p></div>
+            <div class="text-center min-w-[50px]"><p class="text-[8px] text-gray-500">Ashar</p><p id="sholat-ashar" class="text-xs font-bold text-emerald-400">--:--</p></div>
+            <div class="text-center min-w-[50px]"><p class="text-[8px] text-gray-500">Maghrib</p><p id="sholat-maghrib" class="text-xs font-bold text-emerald-400">--:--</p></div>
+            <div class="text-center min-w-[50px]"><p class="text-[8px] text-gray-500">Isya</p><p id="sholat-isya" class="text-xs font-bold text-emerald-400">--:--</p></div>
         </div>
 
-        <div id="last-read-card" class="gradient-brand p-6 rounded-[2rem] mb-8 relative overflow-hidden shadow-xl active:scale-95 transition cursor-pointer">
+        <div id="last-read-card" class="gradient-brand p-6 rounded-[2rem] mb-8 relative overflow-hidden shadow-xl">
             <div class="relative z-10">
-                <p class="text-xs text-emerald-100 opacity-80 mb-1">Terakhir Dibaca 📖</p>
-                <h2 id="last-surah-name" class="text-2xl font-bold">Al-Fatihah</h2>
-                <p id="last-surah-info" class="text-sm text-emerald-100/70 mb-4">Ayat 1</p>
-                <span class="bg-white/20 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur-md">Klik untuk Lanjutkan</span>
+                <p class="text-xs text-emerald-100 font-medium mb-1 opacity-80 italic">Terakhir Di Baca</p>
+                <h2 id="last-surah-name" class="text-2xl font-bold mb-1 underline decoration-emerald-300">Al-Fatihah</h2>
+                <p id="last-surah-info" class="text-sm text-emerald-100/70 mb-5">Ayat No: 1</p>
+                <button id="btn-resume" class="bg-white text-emerald-900 px-6 py-2 rounded-full font-bold text-sm shadow-md active:scale-95 transition">Lanjutkan ></button>
             </div>
-            <div class="absolute -right-6 -bottom-6 text-9xl opacity-10 italic">Quran</div>
+            <div class="absolute -right-6 -bottom-6 text-9xl opacity-10">📖</div>
         </div>
 
         <h3 class="font-bold mb-4 flex items-center gap-2">
             <span class="w-1.5 h-4 bg-emerald-500 rounded-full"></span>
             Daftar Surat
         </h3>
-        <div id="surah-list" class="space-y-3"></div>
-    </div>
-
-    <div id="tab-bookmark" class="hidden p-5 p-page">
-        <h2 class="text-2xl font-bold mb-6">Ayat Favorit 🔖</h2>
-        <div id="bookmark-list" class="space-y-4 text-center py-10 text-gray-500">
-            Belum ada bookmark tersimpan.
+        
+        <div id="surah-list" class="space-y-3">
+            <div class="text-center py-10"><span class="loader"></span><p class="text-xs mt-2 text-gray-500 tracking-widest">MENCARI MUSHAF...</p></div>
         </div>
     </div>
 
-    <div id="detail-page" class="hidden min-h-screen bg-[#0b1414] pb-10">
-        <nav class="sticky top-0 p-5 glass flex items-center justify-between z-50">
-            <button onclick="switchTab('home')" class="text-2xl">←</button>
-            <div class="text-center">
-                <h2 id="current-surah-name" class="font-bold">...</h2>
-                <p id="current-surah-info" class="text-[10px] text-emerald-500 font-bold">MEMUAT</p>
-            </div>
-            <div id="audio-status" class="w-2 h-2 bg-emerald-500 rounded-full animate-ping hidden"></div>
-        </nav>
-        <div id="ayats-container" class="p-5 space-y-10"></div>
+    <div id="bookmark-page" class="hidden p-5 pb-32">
+        <h3 class="font-bold mb-6 text-xl text-emerald-500">Bookmark Saya</h3>
+        <div id="bookmark-list" class="space-y-3">
+            <p class="text-center text-gray-500 py-10">Belum ada bookmark.</p>
+        </div>
     </div>
 
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] glass rounded-3xl p-4 flex justify-around items-center z-[100]">
-        <button onclick="switchTab('home')" class="flex flex-col items-center gap-1">
-            <span>🏠</span><span class="text-[8px] font-bold uppercase">Beranda</span>
+    <div id="detail-page" class="hidden min-h-screen bg-[#0b1414]">
+        <nav class="sticky top-0 p-5 glass flex items-center justify-between z-50">
+            <div class="flex items-center gap-4">
+                <button onclick="showHome()" class="text-2xl">←</button>
+                <div>
+                    <h2 id="current-surah-name" class="font-bold text-lg leading-none">Al-Baqara</h2>
+                    <p id="current-surah-info" class="text-[10px] text-emerald-400 font-bold mt-1">Surat Ke-2</p>
+                </div>
+            </div>
+        </nav>
+
+        <div id="detail-content" class="p-5">
+            <div id="detail-loader" class="text-center py-20"><span class="loader"></span><p class="text-xs mt-2 text-gray-500 tracking-widest uppercase">Membuka Mushaf...</p></div>
+            <div class="glass p-8 rounded-[2rem] mb-8 text-center hidden" id="bismillah-box">
+                <p class="arabic text-3xl text-emerald-400">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+            </div>
+            <div id="ayats-container" class="space-y-10 pb-20"></div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] glass rounded-3xl p-4 flex justify-around items-center z-50 shadow-2xl">
+        <button onclick="showHome()" class="flex flex-col items-center gap-1 group">
+            <span class="text-xl">🏠</span>
+            <span class="text-[8px] font-bold text-emerald-500 uppercase">Home</span>
         </button>
-        <button onclick="switchTab('bookmark')" class="flex flex-col items-center gap-1">
-            <span>🔖</span><span class="text-[8px] font-bold uppercase">Simpan</span>
+        <button onclick="showBookmark()" class="flex flex-col items-center gap-1 group">
+            <span class="text-xl">🔖</span>
+            <span class="text-[8px] font-bold uppercase">Bookmark</span>
         </button>
-        <button onclick="alert('Rifqy Al-Quran v1.0')" class="flex flex-col items-center gap-1">
-            <span>👤</span><span class="text-[8px] font-bold uppercase">Profil</span>
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group">
+            <span class="text-xl">🔄</span>
+            <span class="text-[8px] font-bold uppercase">Refresh</span>
         </button>
-    </nav>
+    </div>
 
     <script>
-        // -- DATA & STATE --
         let currentAudio = null;
         let lastRead = JSON.parse(localStorage.getItem('lastRead')) || { id: 1, name: 'Al-Fatihah', ayat: 1 };
         let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
-        // -- CORE FUNCTIONS --
-        function switchTab(tabId) {
-            document.querySelectorAll('.p-page, #detail-page').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            if(tabId === 'bookmark') renderBookmarks();
-            window.scrollTo(0,0);
+        // 1. Fitur Jam & Sholat
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('jam-digital').innerText = now.toLocaleTimeString('id-ID');
+            document.getElementById('tgl-masehi').innerText = now.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
         }
+        setInterval(updateTime, 1000);
 
-        async function getPrayerTimes() {
+        async function getJadwalSholat() {
             try {
-                const date = new Date().toISOString().split('T')[0];
-                const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${date.replace(/-/g, '/')}`);
+                const date = new Date();
+                const res = await fetch(`https://api.myquran.com/v2/sholat/jadwal/1301/${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`);
                 const data = await res.json();
                 const j = data.data.jadwal;
-                document.getElementById('shubuh').innerText = j.subuh;
-                document.getElementById('dzuhur').innerText = j.dzuhur;
-                document.getElementById('ashar').innerText = j.ashar;
-                document.getElementById('maghrib').innerText = j.maghrib;
-                document.getElementById('isya').innerText = j.isya;
+                document.getElementById('sholat-subuh').innerText = j.subuh;
+                document.getElementById('sholat-dzuhur').innerText = j.dzuhur;
+                document.getElementById('sholat-ashar').innerText = j.ashar;
+                document.getElementById('sholat-maghrib').innerText = j.maghrib;
+                document.getElementById('sholat-isya').innerText = j.isya;
             } catch (e) { console.log("Gagal ambil jadwal sholat"); }
         }
 
+        // 2. Quran Logic
+        function updateLastReadUI() {
+            document.getElementById('last-surah-name').innerText = lastRead.name;
+            document.getElementById('last-surah-info').innerText = `Ayat No: ${lastRead.ayat}`;
+            document.getElementById('btn-resume').onclick = () => viewSurah(lastRead.id);
+        }
+
         async function getSurahList() {
-            const container = document.getElementById('surah-list');
-            container.innerHTML = Array(5).fill(0).map(() => `<div class="h-16 shimmer rounded-2xl w-full"></div>`).join('');
-            
             try {
                 const res = await fetch('https://api.quran.gading.dev/surah');
                 const data = await res.json();
+                const container = document.getElementById('surah-list');
                 container.innerHTML = '';
                 data.data.forEach(s => {
                     container.innerHTML += `
-                        <div onclick="viewSurah(${s.number})" class="glass p-4 rounded-2xl flex justify-between items-center cursor-pointer border-white/5">
+                        <div onclick="viewSurah(${s.number})" class="glass p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-emerald-900/10 active:scale-95 transition">
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 flex items-center justify-center bg-emerald-900/20 text-emerald-500 rounded-xl font-bold text-xs">${s.number}</div>
-                                <div><h4 class="font-bold text-sm">${s.name.transliteration.id}</h4><p class="text-[9px] text-gray-500">${s.revelation.id} • ${s.numberOfVerses} AYAT</p></div>
+                                <div class="w-10 h-10 flex items-center justify-center bg-emerald-900/20 text-emerald-500 rounded-xl font-black text-xs border border-emerald-900/40">${s.number}</div>
+                                <div><h4 class="font-bold text-sm text-white">${s.name.transliteration.id}</h4><p class="text-[9px] text-gray-500 font-bold uppercase">${s.revelation.id} • ${s.numberOfVerses} AYAT</p></div>
                             </div>
                             <div class="arabic text-xl text-emerald-500">${s.name.short}</div>
                         </div>`;
                 });
-            } catch (err) { container.innerHTML = 'Koneksi error.'; }
+            } catch (err) { alert('Cek internet Anda.'); }
         }
 
         async function viewSurah(id) {
-            document.querySelectorAll('.p-page').forEach(el => el.classList.add('hidden'));
-            const detail = document.getElementById('detail-page');
-            detail.classList.remove('hidden');
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('bookmark-page').classList.add('hidden');
+            document.getElementById('detail-page').classList.remove('hidden');
+            document.getElementById('detail-loader').classList.remove('hidden');
+            document.getElementById('ayats-container').innerHTML = '';
+            document.getElementById('bismillah-box').classList.add('hidden');
             window.scrollTo(0,0);
-            
-            const container = document.getElementById('ayats-container');
-            container.innerHTML = Array(3).fill(0).map(() => `<div class="h-40 shimmer rounded-[2rem] w-full"></div>`).join('');
 
             try {
                 const res = await fetch(`https://api.quran.gading.dev/surah/${id}`);
                 const data = await res.json();
                 const surah = data.data;
 
+                document.getElementById('detail-loader').classList.add('hidden');
                 document.getElementById('current-surah-name').innerText = surah.name.transliteration.id;
                 document.getElementById('current-surah-info').innerText = `${surah.revelation.id} • ${surah.numberOfVerses} AYAT`;
+                if(id !== 1 && id !== 9) document.getElementById('bismillah-box').classList.remove('hidden');
 
-                container.innerHTML = '';
                 surah.verses.forEach(v => {
-                    container.innerHTML += `
-                        <div class="border-b border-white/5 pb-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="bg-emerald-500 text-black px-3 py-1 rounded-lg font-black text-[10px]">${v.number.inSurah}</span>
-                                <div class="flex gap-4 text-[10px] font-bold text-emerald-500">
-                                    <button onclick="playAudio('${v.audio.primary}')">▶️ PLAY</button>
-                                    <button onclick="toggleBookmark(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah}, '${v.text.arab.replace(/'/g, "\\'")}')">🔖 SIMPAN</button>
-                                    <button onclick="saveLastRead(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})">📌 TANDAI</button>
+                    document.getElementById('ayats-container').innerHTML += `
+                        <div class="border-b border-white/5 pb-10">
+                            <div class="flex justify-between items-center mb-6 bg-emerald-900/5 p-2 rounded-xl">
+                                <span class="w-8 h-8 rounded-lg bg-emerald-500 text-black flex items-center justify-center text-[10px] font-black">${v.number.inSurah}</span>
+                                <div class="flex gap-4">
+                                    <button onclick="playAudio('${v.audio.primary}')" class="text-[10px] font-bold text-emerald-500">▶️ AUDIO</button>
+                                    <button onclick="addBookmark(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})" class="text-[10px] font-bold text-gray-500">🔖 BOOKMARK</button>
+                                    <button onclick="saveProgress(${id}, '${surah.name.transliteration.id}', ${v.number.inSurah})" class="text-[10px] font-bold text-gray-300">📌 TANDAI</button>
                                 </div>
                             </div>
-                            <p class="arabic text-3xl mb-4 text-white">${v.text.arab}</p>
-                            <p class="text-sm text-gray-400 italic font-light leading-relaxed">${v.translation.id}</p>
+                            <p class="arabic text-3xl mb-6 text-white">${v.text.arab}</p>
+                            <p class="text-sm text-gray-400 italic border-l-2 border-emerald-900 pl-4">${v.translation.id}</p>
                         </div>`;
                 });
-            } catch (err) { container.innerHTML = 'Gagal memuat.'; }
+            } catch (err) { alert('Gagal memuat surat.'); }
         }
 
-        // -- UTILS --
+        function saveProgress(id, name, ayat) {
+            lastRead = { id, name, ayat };
+            localStorage.setItem('lastRead', JSON.stringify(lastRead));
+            alert('Tanda berhasil disimpan!');
+            showHome();
+        }
+
+        function addBookmark(id, name, ayat) {
+            bookmarks.push({ id, name, ayat });
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            alert('Berhasil simpan ke Bookmark!');
+        }
+
+        function showBookmark() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('detail-page').classList.add('hidden');
+            document.getElementById('bookmark-page').classList.remove('hidden');
+            const container = document.getElementById('bookmark-list');
+            container.innerHTML = bookmarks.length ? '' : '<p class="text-center text-gray-500 py-10">Belum ada bookmark.</p>';
+            bookmarks.forEach((b, index) => {
+                container.innerHTML += `
+                    <div class="glass p-4 rounded-xl flex justify-between items-center">
+                        <div onclick="viewSurah(${b.id})">
+                            <h4 class="font-bold">${b.name}</h4>
+                            <p class="text-[10px] text-emerald-500">Ayat Ke: ${b.ayat}</p>
+                        </div>
+                        <button onclick="deleteBookmark(${index})" class="text-red-500 text-xs">Hapus</button>
+                    </div>`;
+            });
+        }
+
+        function deleteBookmark(idx) {
+            bookmarks.splice(idx, 1);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            showBookmark();
+        }
+
         function playAudio(url) {
             if (currentAudio) currentAudio.pause();
             currentAudio = new Audio(url);
             currentAudio.play();
-            document.getElementById('audio-status').classList.remove('hidden');
-            currentAudio.onended = () => document.getElementById('audio-status').classList.add('hidden');
         }
 
-        function saveLastRead(id, name, ayat) {
-            lastRead = { id, name, ayat };
-            localStorage.setItem('lastRead', JSON.stringify(lastRead));
+        function showHome() {
+            if (currentAudio) currentAudio.pause();
+            document.getElementById('detail-page').classList.add('hidden');
+            document.getElementById('bookmark-page').classList.add('hidden');
+            document.getElementById('home-page').classList.remove('hidden');
             updateLastReadUI();
-            alert('Progress berhasil ditandai!');
         }
 
-        function updateLastReadUI() {
-            document.getElementById('last-surah-name').innerText = lastRead.name;
-            document.getElementById('last-surah-info').innerText = `Ayat No: ${lastRead.ayat}`;
-            document.getElementById('last-read-card').onclick = () => viewSurah(lastRead.id);
-        }
-
-        function toggleBookmark(id, name, ayat, arab) {
-            const b = { id, name, ayat, arab };
-            bookmarks.push(b);
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-            alert('Ayat disimpan ke Bookmark!');
-        }
-
-        function renderBookmarks() {
-            const container = document.getElementById('bookmark-list');
-            if (bookmarks.length === 0) {
-                container.innerHTML = 'Belum ada bookmark.';
-                return;
-            }
-            container.innerHTML = bookmarks.map((b, index) => `
-                <div class="glass p-5 rounded-2xl text-left relative">
-                    <h4 class="font-bold text-emerald-400">${b.name} : ${b.ayat}</h4>
-                    <p class="arabic text-xl my-2 truncate">${b.arab}</p>
-                    <button onclick="deleteBookmark(${index})" class="text-[10px] text-red-500 font-bold">HAPUS</button>
-                </div>
-            `).join('');
-        }
-
-        function deleteBookmark(index) {
-            bookmarks.splice(index, 1);
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-            renderBookmarks();
-        }
-
-        setInterval(() => {
-            document.getElementById('real-time').innerText = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-        }, 1000);
-
-        // -- INIT --
-        getPrayerTimes();
-        getSurahList();
         updateLastReadUI();
+        getSurahList();
+        getJadwalSholat();
     </script>
 </body>
 </html>
